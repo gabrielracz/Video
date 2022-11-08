@@ -27,11 +27,11 @@ struct buffer {
 struct buffer* buffers;
 int num_buffers = 6;
 
-FILE* out_file;
+FILE* f_out;
 
 int process_image(void* buf, size_t size) {
 	if(buf) {
-		fwrite(buf, size, 1, stdout);
+		fwrite(buf, size, 1, f_out);
 	}
 	fprintf(stderr, "#");
 	fflush(stderr);
@@ -230,15 +230,15 @@ int open_device()
 
 int main(int argc, char* argv[]) 
 {
-	/*if(argc < 2) {*/
-		/*printf("Usage: vid FILE\n");*/
-	/*}*/
-
-	/*out_file = fopen(argv[1], "a");*/
-	/*if(out_file == NULL) {*/
-		/*perror("open out file");*/
-		/*return -1;*/
-	/*}*/
+	if(argc < 2) {
+		f_out = stdout;
+	}else {
+		f_out = fopen(argv[1], "a");
+		if(f_out == NULL) {
+			perror("open out file");
+			return -1;
+		}
+	}
 
 	open_device();
 	check_device();
